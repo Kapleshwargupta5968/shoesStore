@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  .animate-bounce-slow {
+    animation: bounce-slow 4s ease-in-out infinite;
+  }
+  .drop-shadow-blue {
+    filter: drop-shadow(0 0 30px rgba(37,99,235,0.3));
+  }
+  .stroke-text {
+    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.2);
+    color: transparent;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
