@@ -21,7 +21,7 @@ axiosInstance.interceptors.response.use((response)=>{
     if(error?.response?.status === 401 && !originalRequest._retry){
         originalRequest._retry = true;
         try{
-            await axiosInstance.post("/auth/refresh-access-token");
+            await axios.post("http://localhost:5000/api/auth/refresh-access-token", {}, { withCredentials: true });
             return axiosInstance(originalRequest);
         }catch(refreshError){
             localStorage.removeItem("hasSession");

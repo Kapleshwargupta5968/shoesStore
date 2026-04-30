@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const { generateAccessToken, generateRefreshToken } = require("../utils/generateToken");
 
 exports.signUp = async (req, res) => {
@@ -43,9 +44,16 @@ exports.signUp = async (req, res) => {
 
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production" ? "none":"lax",
+            secure: process.env.NODE_ENV === "production",
             sameSite: process.env.NODE_ENV === "production" ? "strict":"lax",
             maxAge: 15 * 60 * 1000
+        });
+
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "strict":"lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
        return res.status(201).json({
@@ -100,7 +108,14 @@ exports.signIn = async (req, res) => {
 
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production" ? "none":"lax",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "strict":"lax",
+            maxAge: 15 * 60 * 1000
+        });
+
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
             sameSite: process.env.NODE_ENV === "production" ? "strict":"lax",
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
@@ -224,7 +239,7 @@ exports.refreshAccessToken = async (req, res) => {
 
         res.cookie("accessToken",newAccessToken,{
             httpOnly:true,
-            secure: process.env.NODE_ENV === "production" ? "none":"lax",
+            secure: process.env.NODE_ENV === "production",
             sameSite: process.env.NODE_ENV === "production" ? "strict":"lax",
             maxAge: 15 * 60 * 1000
         });

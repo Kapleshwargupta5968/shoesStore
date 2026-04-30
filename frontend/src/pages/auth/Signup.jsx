@@ -7,7 +7,7 @@ import { Button } from '../../components/reusableComponents/Button';
 import heroShoe from '../../assets/hero-shoe.png';
 import { registerUser } from '../../services/api/authServices';
 import { useDispatch, useSelector } from 'react-redux';
-import { authStart, authSuccess, authFailure } from '../../features/auth/authSlice';
+import { authStart, authFailure, setLoading } from '../../features/auth/authSlice';
 import { message } from "antd";
 
 const Signup = () => {
@@ -19,9 +19,9 @@ const Signup = () => {
     try {
       dispatch(authStart());
       const response = await registerUser(data);
-      dispatch(authSuccess(response));
+      dispatch(setLoading(false));
       navigate("/signin");
-      message.success(`${response.user.name} registered successfully`);
+      message.success(`${response.user.name} registered successfully. Please login.`);
     } catch (error) {
       const errorMsg = error?.response?.data?.message || "Something went wrong";
       dispatch(authFailure(errorMsg));
